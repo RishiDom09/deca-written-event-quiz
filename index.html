@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="A 16-personalities-style quiz that matches DECA members to the written event that fits how they like to work.">
+<meta name="description" content="A 16-personalities-style quiz that matches DECA members to the prepared event that fits how they like to work.">
 <title>DECA Pick Your Written Event</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
@@ -13,8 +13,8 @@
   --bg:#F2F4F8; --surface:#FFFFFF; --ink:#101B30; --muted:#5A6781; --line:#D9DEE8;
   --accent:#1F4FD8; --accent-ink:#FFFFFF; --soft:#E6EBF7;
   --agree:#1F4FD8; --disagree:#D8532B; --on-fam:#FFFFFF;
-  --fam-vh:#D9512C; --fam-vd:#5A47D1; --fam-ph:#168A60; --fam-pd:#1E6BD6;
-  --fam-vh-soft:#FBE9E2; --fam-vd-soft:#ECE8FB; --fam-ph-soft:#DFF4EA; --fam-pd-soft:#E2ECFB;
+  --fam-vh:#D9512C; --fam-vd:#5A47D1; --fam-ph:#168A60; --fam-pd:#1E6BD6; --fam-sl:#B07412;
+  --fam-vh-soft:#FBE9E2; --fam-vd-soft:#ECE8FB; --fam-ph-soft:#DFF4EA; --fam-pd-soft:#E2ECFB; --fam-sl-soft:#FBF0D8;
   --display:"Syne",ui-sans-serif,system-ui,sans-serif;
   --body:"Instrument Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
   --shadow:0 10px 30px rgba(16,27,48,.08);
@@ -24,8 +24,8 @@
     --bg:#0E1420; --surface:#161E2E; --ink:#EDF1F8; --muted:#9CA8BF; --line:#2A3448;
     --accent:#6D8DFF; --accent-ink:#0E1420; --soft:#1E2A42;
     --agree:#6D8DFF; --disagree:#F2865F; --on-fam:#0E1420;
-    --fam-vh:#F2865F; --fam-vd:#A596FF; --fam-ph:#4CCB97; --fam-pd:#6FA5FF;
-    --fam-vh-soft:#3A241C; --fam-vd-soft:#282344; --fam-ph-soft:#15302A; --fam-pd-soft:#1B2A45;
+    --fam-vh:#F2865F; --fam-vd:#A596FF; --fam-ph:#4CCB97; --fam-pd:#6FA5FF; --fam-sl:#E8B64F;
+    --fam-vh-soft:#3A241C; --fam-vd-soft:#282344; --fam-ph-soft:#15302A; --fam-pd-soft:#1B2A45; --fam-sl-soft:#3A2E12;
     --shadow:0 10px 30px rgba(0,0,0,.35);
     color-scheme:dark;
   }
@@ -34,8 +34,8 @@
   --bg:#0E1420; --surface:#161E2E; --ink:#EDF1F8; --muted:#9CA8BF; --line:#2A3448;
   --accent:#6D8DFF; --accent-ink:#0E1420; --soft:#1E2A42;
   --agree:#6D8DFF; --disagree:#F2865F; --on-fam:#0E1420;
-  --fam-vh:#F2865F; --fam-vd:#A596FF; --fam-ph:#4CCB97; --fam-pd:#6FA5FF;
-  --fam-vh-soft:#3A241C; --fam-vd-soft:#282344; --fam-ph-soft:#15302A; --fam-pd-soft:#1B2A45;
+  --fam-vh:#F2865F; --fam-vd:#A596FF; --fam-ph:#4CCB97; --fam-pd:#6FA5FF; --fam-sl:#E8B64F;
+  --fam-vh-soft:#3A241C; --fam-vd-soft:#282344; --fam-ph-soft:#15302A; --fam-pd-soft:#1B2A45; --fam-sl-soft:#3A2E12;
   --shadow:0 10px 30px rgba(0,0,0,.35);
   color-scheme:dark;
 }
@@ -104,7 +104,8 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-off
 .badge .top .eyebrow{color:inherit;opacity:.85}
 .badge h2{font-size:clamp(2.4rem,7vw,3.8rem);font-weight:800;letter-spacing:-.02em}
 .code{display:flex;gap:8px;flex-wrap:wrap}
-.code span{font-family:var(--display);font-weight:800;font-size:1.3rem;width:2.2em;height:2.2em;display:grid;place-items:center;border-radius:10px;background:color-mix(in srgb,var(--on-fam) 22%,transparent)}
+.code span{font-family:var(--display);font-weight:800;font-size:1.3rem;min-width:2.2em;height:2.2em;padding:0 .4em;display:grid;place-items:center;border-radius:10px;background:color-mix(in srgb,var(--on-fam) 22%,transparent)}
+.code span.sfx{background:var(--on-fam);color:var(--fc)}
 .badge .bottom{padding:24px 28px 28px;display:grid;gap:18px}
 .event{display:grid;gap:4px}
 .event .name{font-family:var(--display);font-weight:800;font-size:clamp(1.4rem,4vw,1.9rem);color:var(--fc)}
@@ -151,8 +152,8 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-off
   <div class="hero">
     <p class="eyebrow">DECA prepared events · 2026–27 season</p>
     <h1>Which written event <span>are you?</span></h1>
-    <p class="lede">Twenty DECA written events, one of you. Answer 24 quick agree-or-disagree questions and get a type, an event, and the two closest alternatives, in the style of the 16-personalities test.</p>
-    <div class="meta"><span>⏱ About 5 minutes</span><span>✎ 24 questions</span><span>◎ 16 types → 20 events</span></div>
+    <p class="lede">Twenty-three DECA prepared events, one of you. Answer 30 quick agree-or-disagree questions and get a type, an event, and the closest alternatives, in the style of the 16-personalities test.</p>
+    <div class="meta"><span>⏱ About 5 minutes</span><span>✎ 30 questions</span><span>◎ 16 types + 3 selling types → 23 events</span></div>
     <div><button class="btn" id="start">Start the quiz</button></div>
   </div>
 
@@ -161,21 +162,23 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-off
     <div class="fam" style="--fc:var(--fam-vd)"><b>Architects</b><span>Full 20-page business plans. Independent, International, Franchise, Business Growth.</span></div>
     <div class="fam" style="--fc:var(--fam-ph)"><b>Doers</b><span>Project Management events. Run a real project, then report what happened.</span></div>
     <div class="fam" style="--fc:var(--fam-pd)"><b>Analysts</b><span>Business Operations Research. Study a local business and write its strategy.</span></div>
+    <div class="fam" style="--fc:var(--fam-sl)"><b>Sellers</b><span>Professional Selling and Consulting. No written entry: one person, one live pitch. PSE, FCE, HTPS.</span></div>
   </div>
 
   <div class="how">
     <p class="eyebrow">How it scores you</p>
-    <p>Every question moves you along one of four dichotomies. Your four letters pick one of 16 types, and each type maps to the DECA event whose work you'd most enjoy doing for six months.</p>
+    <p>Every question moves you along one of five dichotomies. Your first four letters pick one of 16 types, and each type maps to the written event whose work you'd most enjoy doing for six months. The fifth adds a suffix: -W keeps you in a written event, -S swaps you into one of the three Professional Selling events, which have no written entry at all.</p>
     <div class="dich">
       <div><b>V · P</b>Venture or Partner. Start something new, or work inside a real organization or community.</div>
       <div><b>H · D</b>Hands-on or Deep-dive. A tight pitch deck or a real project, versus a thorough 20-page document.</div>
       <div><b>N · C</b>Numbers or Creative. Financials and data, or story, brand, and people.</div>
       <div><b>O · M</b>Originator or Mobilizer. Your own idea from scratch, or rallying people around something that exists.</div>
+      <div><b>S · W</b>Seller or Writer. A solo live pitch with no paper, or a team and a document you polish for months.</div>
     </div>
   </div>
 
   <div class="section">
-    <h3>Browse all 16 types</h3>
+    <h3>Browse all 19 types</h3>
     <div class="grid16" id="grid-intro"></div>
   </div>
 </section>
@@ -183,7 +186,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-off
 <!-- QUIZ -->
 <section id="quiz" class="quiz" hidden>
   <div class="progress">
-    <div class="meta"><span id="qnum">Question 1 of 24</span><span id="qpct">0%</span></div>
+    <div class="meta"><span id="qnum">Question 1 of 30</span><span id="qpct">0%</span></div>
     <div class="bar"><i id="qbar"></i></div>
   </div>
   <div class="qcard" id="qcard">
@@ -245,21 +248,29 @@ var QUESTIONS=[
   {a:0,d:-1,t:"I'd rather be the person who improves how an existing organization runs than the one who starts a rival."},
   {a:1,d:-1,t:"I like producing detailed documents: SWOT analyses, operations plans, financial statements."},
   {a:2,d:-1,t:"I notice branding, aesthetics, and vibe before I notice the numbers."},
-  {a:3,d:-1,t:"I love organizing people, logistics, and outreach."}
+  {a:3,d:-1,t:"I love organizing people, logistics, and outreach."},
+  {a:4,d:1, t:"I'd rather talk a client into a decision face to face than write a report about it."},
+  {a:4,d:-1,t:"I like having months to polish a document before anyone sees it."},
+  {a:4,d:1, t:"I want to compete alone, with no teammates to coordinate."},
+  {a:4,d:-1,t:"Give me a team and a shared document over a solo pitch."},
+  {a:4,d:1, t:"I'm at my best improvising answers to a judge's objections in real time."},
+  {a:4,d:-1,t:"A written entry worth half my score feels like an advantage, not a chore."}
 ];
 
 var AXES=[
   {L:"V",R:"P",ln:"Venture",rn:"Partner"},
   {L:"H",R:"D",ln:"Hands-on",rn:"Deep-dive"},
   {L:"N",R:"C",ln:"Numbers",rn:"Creative"},
-  {L:"O",R:"M",ln:"Originator",rn:"Mobilizer"}
+  {L:"O",R:"M",ln:"Originator",rn:"Mobilizer"},
+  {L:"S",R:"W",ln:"Seller",rn:"Writer"}
 ];
 
 var FAM={
   vh:{name:"Launchers",color:"var(--fam-vh)"},
   vd:{name:"Architects",color:"var(--fam-vd)"},
   ph:{name:"Doers",color:"var(--fam-ph)"},
-  pd:{name:"Analysts",color:"var(--fam-pd)"}
+  pd:{name:"Analysts",color:"var(--fam-pd)"},
+  sl:{name:"Sellers",color:"var(--fam-sl)"}
 };
 
 var F20="20-page written entry", FPD="20-slide pitch deck";
@@ -305,7 +316,13 @@ var EVENTS={
   HTOR:{n:"Hospitality and Tourism Operations Research",cat:"Business Operations Research",fmt:F20,team:T13,pres:P15,
     what:"This year every Operations Research event has the same topic: partner with a local business, research what drives customer loyalty and repeat engagement, and write a strategic retention plan. In Hospitality and Tourism, that partner is a restaurant, hotel, attraction, or travel business."},
   BOR:{n:"Business Services Operations Research",cat:"Business Operations Research",fmt:F20,team:T13,pres:P15,
-    what:"Same loyalty-and-retention topic, with a business-services partner: a salon, gym, repair shop, agency, or any service firm that doesn't fit the other four clusters."}
+    what:"Same loyalty-and-retention topic, with a business-services partner: a salon, gym, repair shop, agency, or any service firm that doesn't fit the other four clusters."},
+  PSE:{n:"Professional Selling",cat:"Professional Selling and Consulting",fmt:"No written entry · live sales presentation + exam",team:"1 member (solo)",pres:P15,
+    what:"A prepared sales presentation on a topic DECA sets each year, delivered one-on-one to a judge who plays the buyer. This year you're a sales rep pitching a platform that combines AI-powered customer service with retail analytics to the owner of a regional retail chain, focused on efficiency, costs, inventory, and customer experience."},
+  FCE:{n:"Financial Consulting",cat:"Professional Selling and Consulting",fmt:"No written entry · live consulting presentation + exam",team:"1 member (solo)",pres:P15,
+    what:"A prepared consulting presentation to a judge playing the client. This year the client is a small-business owner in their late 50s who needs advice on selling, transferring, or winding down the business while planning for retirement."},
+  HTPS:{n:"Hospitality and Tourism Professional Selling",cat:"Professional Selling and Consulting",fmt:"No written entry · live sales presentation + exam",team:"1 member (solo)",pres:P15,
+    what:"A prepared sales presentation to a judge playing the buyer. This year you're a tour wholesaler's rep pitching immersive, experience-based group travel packages to a local travel agency that wants to move beyond bus tours and reach younger travelers."}
 };
 
 var TYPES={
@@ -359,7 +376,26 @@ var TYPES={
     watch:"Business Services Operations Research uses the same topic for any service business. If your best local partner is a salon or a gym, use that cluster instead."}
 };
 
+var SELLERS={
+  PSE:{fam:"sl",name:"The Closer",ev:"PSE",alts:["FCE","HTPS"],
+    why:"You'd rather win the room than write the report. Professional Selling is one person, one prepared pitch, and a judge playing a skeptical buyer. The whole score is how well you sell live.",
+    watch:"No written entry means no safety net. Your prep is product knowledge, objection handling, and a visual aid you can run without notes. You also take a cluster exam."},
+  FCE:{fam:"sl",name:"The Advisor",ev:"FCE",alts:["PSE","FOR"],
+    why:"You like numbers and you like people, and you'd rather advise across a table than write 20 pages. Financial Consulting is a live consulting session with a business owner who has real decisions to make.",
+    watch:"Judges reward specific, defensible recommendations, not generic advice. Know succession options, basic valuation, and retirement vehicles cold. You also take a finance cluster exam."},
+  HTPS:{fam:"sl",name:"The Concierge",ev:"HTPS",alts:["PSE","HTOR"],
+    why:"You sell experiences, not spreadsheets. Hospitality and Tourism Professional Selling is a live pitch where the product is a trip, and the buyer needs to feel it before they buy it.",
+    watch:"The pitch needs real itineraries, pricing, and margins for the agency, so research actual packages. You also take a hospitality cluster exam."}
+};
+// Which selling event a written type would swap into: numbers + depth → consulting, creative + mobilizing → hospitality, otherwise general selling.
+function sellerFor(code){
+  var n=code.charAt(2)==="N", d=code.charAt(1)==="D", m=code.charAt(3)==="M";
+  if(n) return d?"FCE":"PSE";
+  return m?"HTPS":"PSE";
+}
+
 var ORDER=["VHNO","VHCO","VHNM","VHCM","VDNO","VDCO","VDNM","VDCM","PHNO","PHNM","PHCO","PHCM","PDNO","PDNM","PDCO","PDCM"];
+var SELLER_ORDER=["PSE","FCE","HTPS"];
 
 /* ---------- state ---------- */
 var answers=new Array(QUESTIONS.length).fill(null), idx=0;
@@ -371,17 +407,17 @@ function load(){try{var s=JSON.parse(localStorage.getItem("deca-quiz")||"null");
 
 /* ---------- scoring ---------- */
 function score(ans){
-  var sums=[0,0,0,0];
-  QUESTIONS.forEach(function(q,i){var v=ans[i];if(v==null)return;sums[q.a]+=v*q.d;});
-  var max=3*QUESTIONS.length/4;                     // 18 per axis
+  var sums=[0,0,0,0,0],counts=[0,0,0,0,0];
+  QUESTIONS.forEach(function(q,i){counts[q.a]++;var v=ans[i];if(v==null)return;sums[q.a]+=v*q.d;});
   var code="",pcts=[];
   AXES.forEach(function(ax,i){
-    var left=sums[i]>=0;                           // ties go to the first letter
-    code+=left?ax.L:ax.R;
+    var max=3*counts[i];                           // 18 per axis
+    var left=i===4?sums[i]>0:sums[i]>=0;           // ties go to the first letter, except Seller/Writer where a tie stays Writer
+    if(i<4)code+=left?ax.L:ax.R;
     var p=Math.round(50+50*Math.abs(sums[i])/max); // strength of the winning side
     pcts.push({win:left?ax.ln:ax.rn,lose:left?ax.rn:ax.ln,left:left,pct:p});
   });
-  return {code:code,pcts:pcts};
+  return {code:code,suffix:sums[4]>0?"S":"W",pcts:pcts};
 }
 
 /* ---------- rendering ---------- */
@@ -416,23 +452,40 @@ function advance(){
 
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
 
-function typeCard(code,me){
-  var t=TYPES[code],f=FAM[t.fam];
-  return '<button class="tcard'+(me?' me':'')+'" style="--fc:'+f.color+'" data-type="'+code+'">'+
-    '<span class="tc">'+code.split("").join(" · ")+'</span><span class="tn">'+esc(t.name)+'</span><span class="te">'+esc(EVENTS[t.ev].n)+'</span></button>';
+function typeCard(key,me){
+  var seller=key.indexOf("S:")===0;
+  var t=seller?SELLERS[key.slice(2)]:TYPES[key],f=FAM[t.fam];
+  var label=seller?"-S · "+t.ev:key.split("").join(" · ")+" · -W";
+  return '<button class="tcard'+(me?' me':'')+'" style="--fc:'+f.color+'" data-type="'+key+'">'+
+    '<span class="tc">'+label+'</span><span class="tn">'+esc(t.name)+'</span><span class="te">'+esc(EVENTS[t.ev].n)+'</span></button>';
 }
 
+// sc: {code: 4 written letters or "", suffix: "S"|"W", pcts: array|null, seller: event key when suffix is S}
 function renderResult(sc,fromGrid){
-  var code=sc.code,t=TYPES[code],f=FAM[t.fam],ev=EVENTS[t.ev];
-  var letters=code.split("").map(function(c){return "<span>"+c+"</span>";}).join("");
+  var isSeller=sc.suffix==="S";
+  var sellerKey=isSeller?(sc.seller||sellerFor(sc.code)):null;
+  var t=isSeller?SELLERS[sellerKey]:TYPES[sc.code],f=FAM[t.fam],ev=EVENTS[t.ev];
+  var fullCode=(sc.code?sc.code+"-":"")+sc.suffix;
+  var letters=sc.code.split("").filter(Boolean).map(function(c){return "<span>"+c+"</span>";}).join("")+'<span class="sfx">-'+sc.suffix+'</span>';
   var traits=sc.pcts?sc.pcts.map(function(p){
     var fillStyle=p.left?'left:0;width:'+p.pct+'%':'right:0;width:'+p.pct+'%';
     return '<div class="trait"><div class="ends"><span class="'+(p.left?'win':'')+'">'+(p.left?p.win:p.lose)+'</span><span class="'+(p.left?'':'win')+'">'+(p.left?p.lose:p.win)+'</span></div>'+
       '<div class="track"><div class="fill" style="'+fillStyle+'"></div></div><div class="pct">'+p.pct+'% '+p.win+'</div></div>';
   }).join(""):"";
   var alts=t.alts.map(function(a){return '<div class="alt"><span class="ac">'+a+'</span><div><b>'+esc(EVENTS[a].n)+'</b><span>'+esc(EVENTS[a].cat)+' · '+esc(EVENTS[a].fmt)+'</span></div></div>';}).join("");
-  var grid=ORDER.map(function(c){return typeCard(c,c===code);}).join("");
-  var shareText="I'm "+t.name+" ("+code+"). My DECA written event match: "+ev.n+" ("+t.ev+").";
+  var grid=ORDER.map(function(c){return typeCard(c,!isSeller&&c===sc.code);}).join("")+SELLER_ORDER.map(function(k){return typeCard("S:"+k,isSeller&&k===sellerKey);}).join("");
+  var shareText="I'm "+t.name+" ("+fullCode+"). My DECA event match: "+ev.n+" ("+t.ev+").";
+
+  var swap;
+  if(isSeller&&sc.code){
+    var w=TYPES[sc.code];
+    swap='<div class="callout" style="border-color:'+FAM[w.fam].color+'"><b>If you\u2019d rather write after all</b><span>Your written-event type is '+esc(w.name)+' ('+sc.code+'-W), which maps to '+esc(EVENTS[w.ev].n)+' ('+w.ev+'): '+esc(EVENTS[w.ev].fmt)+', '+esc(EVENTS[w.ev].team)+'.</span></div>';
+  }else if(!isSeller&&sc.code){
+    var sk=sellerFor(sc.code),st=SELLERS[sk];
+    swap='<div class="callout" style="border-color:'+FAM.sl.color+'"><b>Would rather not write anything?</b><span>Professional Selling (PSE), Financial Consulting (FCE), and Hospitality and Tourism Professional Selling (HTPS) have no written entry: one person, a prepared pitch on a set topic, plus an exam. Your closest fit is '+esc(st.name)+', '+esc(EVENTS[sk].n)+' ('+sk+').</span></div>';
+  }else{
+    swap='<div class="callout" style="border-color:'+FAM.sl.color+'"><b>About the selling events</b><span>Professional Selling (PSE), Financial Consulting (FCE), and Hospitality and Tourism Professional Selling (HTPS) have no written entry: one person, a prepared pitch on a set topic, plus an exam.</span></div>';
+  }
 
   result.innerHTML=
     '<div class="badge" style="--fc:'+f.color+'"><div class="top">'+
@@ -443,16 +496,16 @@ function renderResult(sc,fromGrid){
       '<div class="specs"><div class="spec"><span class="k">Format</span><span class="v">'+esc(ev.fmt)+'</span></div>'+
         '<div class="spec"><span class="k">Team</span><span class="v">'+esc(ev.team)+'</span></div>'+
         '<div class="spec"><span class="k">Presentation</span><span class="v">'+esc(ev.pres)+'</span></div>'+
-        '<div class="spec"><span class="k">Scoring</span><span class="v">50% written · 50% presentation</span></div></div>'+
+        '<div class="spec"><span class="k">Scoring</span><span class="v">'+(isSeller?'Presentation + exam':'50% written · 50% presentation')+'</span></div></div>'+
       '<p>'+esc(ev.what)+'</p>'+
     '</div></div>'+
-    (sc.pcts?'<div class="section" style="--fc:'+f.color+'"><h3>Your four dichotomies</h3><div class="traits">'+traits+'</div></div>':'')+
+    (sc.pcts?'<div class="section" style="--fc:'+f.color+'"><h3>Your five dichotomies</h3><div class="traits">'+traits+'</div></div>':'')+
     '<div class="section"><h3>Why it fits you</h3><p>'+esc(t.why)+'</p></div>'+
     '<div class="section"><h3>Watch out for</h3><p>'+esc(t.watch)+'</p></div>'+
     '<div class="section" style="--fc:'+f.color+'"><h3>Close matches</h3><div class="alts">'+alts+'</div></div>'+
-    '<div class="callout"><b>Would rather not write anything?</b><span>Professional Selling (PSE), Financial Consulting (FCE), and Hospitality and Tourism Professional Selling (HTPS) have no written entry: one person, a prepared sales or consulting presentation on a set topic, plus an exam. This year’s topics: pitching an AI customer-service and retail-analytics platform to a regional retail chain, advising a business owner in their late 50s on selling or handing off the business, and selling experience-based group travel packages to a travel agency.</span></div>'+
+    swap+
     '<div class="actions"><button class="btn" id="copy">Copy my result</button><button class="btn ghost" id="retake">'+(fromGrid?'Take the quiz':'Retake the quiz')+'</button><span class="toast" id="toast"></span></div>'+
-    '<div class="section"><h3>All 16 types</h3><div class="grid16" id="grid-result">'+grid+'</div></div>';
+    '<div class="section"><h3>All 19 types</h3><div class="grid16" id="grid-result">'+grid+'</div></div>';
 
   show("result");
   $("copy").addEventListener("click",function(){
@@ -467,12 +520,14 @@ function renderResult(sc,fromGrid){
 function bindGrid(el){
   el.addEventListener("click",function(e){
     var b=e.target.closest("[data-type]");if(!b)return;
-    renderResult({code:b.dataset.type,pcts:null},true);
+    var key=b.dataset.type;
+    if(key.indexOf("S:")===0)renderResult({code:"",suffix:"S",seller:key.slice(2),pcts:null},true);
+    else renderResult({code:key,suffix:"W",pcts:null},true);
   });
 }
 
 /* ---------- wire up ---------- */
-$("grid-intro").innerHTML=ORDER.map(function(c){return typeCard(c,false);}).join("");
+$("grid-intro").innerHTML=ORDER.map(function(c){return typeCard(c,false);}).join("")+SELLER_ORDER.map(function(k){return typeCard("S:"+k,false);}).join("");
 bindGrid($("grid-intro"));
 $("start").addEventListener("click",function(){renderQ();show("quiz");});
 $("scale").addEventListener("click",function(e){var d=e.target.closest(".dot");if(d)pick(+d.dataset.v);});
