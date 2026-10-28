@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="A 16-personalities-style quiz that matches DECA members to the written event that fits how they like to work.">
+<title>DECA Pick Your Written Event</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout: one centered column (max 760px). Intro → one question per screen with a 7-dot scale → result dossier with 4 trait bars. Family color is the only strong hue on each screen. */
+:root{
+  --bg:#F2F4F8; --surface:#FFFFFF; --ink:#101B30; --muted:#5A6781; --line:#D9DEE8;
+  --accent:#1F4FD8; --accent-ink:#FFFFFF; --soft:#E6EBF7;
+  --agree:#1F4FD8; --disagree:#D8532B; --on-fam:#FFFFFF;
+  --fam-vh:#D9512C; --fam-vd:#5A47D1; --fam-ph:#168A60; --fam-pd:#1E6BD6;
+  --fam-vh-soft:#FBE9E2; --fam-vd-soft:#ECE8FB; --fam-ph-soft:#DFF4EA; --fam-pd-soft:#E2ECFB;
+  --display:"Syne",ui-sans-serif,system-ui,sans-serif;
+  --body:"Instrument Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --shadow:0 10px 30px rgba(16,27,48,.08);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1420; --surface:#161E2E; --ink:#EDF1F8; --muted:#9CA8BF; --line:#2A3448;
+    --accent:#6D8DFF; --accent-ink:#0E1420; --soft:#1E2A42;
+    --agree:#6D8DFF; --disagree:#F2865F; --on-fam:#0E1420;
+    --fam-vh:#F2865F; --fam-vd:#A596FF; --fam-ph:#4CCB97; --fam-pd:#6FA5FF;
+    --fam-vh-soft:#3A241C; --fam-vd-soft:#282344; --fam-ph-soft:#15302A; --fam-pd-soft:#1B2A45;
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1420; --surface:#161E2E; --ink:#EDF1F8; --muted:#9CA8BF; --line:#2A3448;
+  --accent:#6D8DFF; --accent-ink:#0E1420; --soft:#1E2A42;
+  --agree:#6D8DFF; --disagree:#F2865F; --on-fam:#0E1420;
+  --fam-vh:#F2865F; --fam-vd:#A596FF; --fam-ph:#4CCB97; --fam-pd:#6FA5FF;
+  --fam-vh-soft:#3A241C; --fam-vd-soft:#282344; --fam-ph-soft:#15302A; --fam-pd-soft:#1B2A45;
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;margin:0;
+  padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:760px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);line-height:1.1;text-wrap:balance;margin:0}
+p{margin:0}
+.eyebrow{font-family:var(--display);font-weight:700;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+button{font:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.btn{display:inline-flex;align-items:center;gap:.5em;border:0;border-radius:999px;padding:.8em 1.5em;font-family:var(--display);font-weight:700;font-size:1rem;background:var(--accent);color:var(--accent-ink);transition:transform .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn.small{padding:.55em 1.1em;font-size:.9rem}
+.stack{display:grid;gap:18px}
+[hidden]{display:none!important}
+
+/* intro */
+.hero{display:grid;gap:22px;padding-block:24px 8px}
+.hero h1{font-size:clamp(2.6rem,8vw,4.4rem);font-weight:800;letter-spacing:-.02em}
+.hero h1 span{color:var(--accent)}
+.lede{font-size:1.15rem;max-width:34em;color:var(--ink)}
+.meta{display:flex;flex-wrap:wrap;gap:10px 22px;color:var(--muted);font-size:.95rem}
+.families{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:8px}
+.fam{border-radius:14px;padding:14px 16px;display:grid;gap:4px;background:var(--surface);border-top:5px solid var(--fc)}
+.fam b{font-family:var(--display);font-size:1.05rem;color:var(--fc)}
+.fam span{font-size:.9rem;color:var(--muted)}
+.how{display:grid;gap:10px;padding:20px 22px;border:1.5px solid var(--line);border-radius:16px;background:var(--surface)}
+.how ol{margin:0;padding-left:1.2em;display:grid;gap:6px}
+.dich{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.dich div{background:var(--soft);border-radius:12px;padding:10px 12px;font-size:.92rem}
+.dich b{font-family:var(--display);display:block;font-size:1rem}
+
+/* quiz */
+.quiz{display:grid;gap:22px}
+.progress{display:grid;gap:8px}
+.bar{height:8px;border-radius:999px;background:var(--soft);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.progress .meta{justify-content:space-between}
+.qcard{background:var(--surface);border-radius:22px;padding:34px 28px 30px;box-shadow:var(--shadow);display:grid;gap:30px;min-height:300px;animation:rise .25s ease-out}
+@keyframes rise{from{opacity:.4;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.qcard{animation:none}.btn:hover{transform:none}}
+.qtext{font-family:var(--display);font-weight:700;font-size:clamp(1.35rem,3.4vw,1.75rem);text-align:center;max-width:22em;margin:0 auto}
+.scale{display:flex;align-items:center;justify-content:center;gap:clamp(8px,2vw,16px)}
+.scale .lab{font-family:var(--display);font-weight:700;font-size:.85rem;text-transform:uppercase;letter-spacing:.06em;width:5.2em;text-align:center}
+.scale .lab.d{color:var(--disagree)}.scale .lab.a{color:var(--agree)}
+.dot{border-radius:50%;border:2.5px solid var(--c);background:transparent;padding:0;flex:none;transition:background .15s,transform .15s;width:var(--s);height:var(--s)}
+.dot:hover{transform:scale(1.08)}
+.dot.on{background:var(--c)}
+.dot[data-v="-3"]{--s:54px;--c:var(--disagree)}.dot[data-v="-2"]{--s:44px;--c:var(--disagree)}.dot[data-v="-1"]{--s:34px;--c:var(--disagree)}
+.dot[data-v="0"]{--s:28px;--c:var(--muted)}
+.dot[data-v="1"]{--s:34px;--c:var(--agree)}.dot[data-v="2"]{--s:44px;--c:var(--agree)}.dot[data-v="3"]{--s:54px;--c:var(--agree)}
+@media (max-width:460px){.scale{gap:6px}.scale .lab{display:none}.dot[data-v="-3"],.dot[data-v="3"]{--s:46px}.dot[data-v="-2"],.dot[data-v="2"]{--s:38px}.dot[data-v="-1"],.dot[data-v="1"]{--s:30px}.dot[data-v="0"]{--s:24px}.qcard{padding:26px 18px}}
+.mobile-labs{display:none;justify-content:space-between;font-family:var(--display);font-weight:700;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em}
+.mobile-labs .d{color:var(--disagree)}.mobile-labs .a{color:var(--agree)}
+@media (max-width:460px){.mobile-labs{display:flex}}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.hint{color:var(--muted);font-size:.9rem}
+
+/* result */
+.result{display:grid;gap:26px}
+.badge{background:var(--surface);border-radius:24px;overflow:hidden;box-shadow:var(--shadow)}
+.badge .top{background:var(--fc);color:var(--on-fam);padding:30px 28px 26px;display:grid;gap:10px}
+.badge .top .eyebrow{color:inherit;opacity:.85}
+.badge h2{font-size:clamp(2.4rem,7vw,3.8rem);font-weight:800;letter-spacing:-.02em}
+.code{display:flex;gap:8px;flex-wrap:wrap}
+.code span{font-family:var(--display);font-weight:800;font-size:1.3rem;width:2.2em;height:2.2em;display:grid;place-items:center;border-radius:10px;background:color-mix(in srgb,var(--on-fam) 22%,transparent)}
+.badge .bottom{padding:24px 28px 28px;display:grid;gap:18px}
+.event{display:grid;gap:4px}
+.event .name{font-family:var(--display);font-weight:800;font-size:clamp(1.4rem,4vw,1.9rem);color:var(--fc)}
+.event .cat{color:var(--muted)}
+.specs{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.spec{background:var(--soft);border-radius:12px;padding:10px 12px;display:grid;gap:2px;min-width:0}
+.spec .k{font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-family:var(--display);font-weight:700}
+.spec .v{font-weight:600}
+.section{background:var(--surface);border-radius:18px;padding:22px 24px;display:grid;gap:12px;border:1.5px solid var(--line)}
+.section h3{font-size:1.2rem;font-weight:700}
+.section ul{margin:0;padding-left:1.2em;display:grid;gap:6px}
+.traits{display:grid;gap:14px}
+.trait{display:grid;gap:6px}
+.trait .ends{display:flex;justify-content:space-between;font-family:var(--display);font-weight:700;font-size:.92rem}
+.trait .ends .win{color:var(--fc)}
+.trait .track{height:12px;border-radius:999px;background:var(--soft);position:relative;overflow:hidden}
+.trait .fill{position:absolute;top:0;bottom:0;background:var(--fc);border-radius:999px}
+.trait .pct{font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.alts{display:grid;gap:10px}
+.alt{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;padding:12px 14px;border-radius:12px;background:var(--soft)}
+.alt .ac{font-family:var(--display);font-weight:800;color:var(--fc);min-width:3.6em}
+.alt b{display:block}
+.alt span{color:var(--muted);font-size:.95rem}
+.callout{border-left:4px solid var(--accent);padding:14px 18px;background:var(--surface);border-radius:0 14px 14px 0;display:grid;gap:6px;font-size:.97rem}
+.callout b{font-family:var(--display)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.toast{color:var(--muted);font-size:.9rem}
+.grid16{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.tcard{text-align:left;border:1.5px solid var(--line);border-radius:14px;background:var(--surface);padding:12px 14px;display:grid;gap:2px;border-top:5px solid var(--fc);min-width:0}
+.tcard .tc{font-family:var(--display);font-weight:800;font-size:.85rem;letter-spacing:.08em;color:var(--fc)}
+.tcard .tn{font-family:var(--display);font-weight:700;font-size:1.02rem}
+.tcard .te{font-size:.85rem;color:var(--muted)}
+.tcard.me{outline:3px solid var(--fc);outline-offset:2px}
+.foot{color:var(--muted);font-size:.85rem;line-height:1.5}
+.foot a{color:inherit}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<!-- INTRO -->
+<section id="intro" class="stack">
+  <div class="hero">
+    <p class="eyebrow">DECA prepared events · 2026–27 season</p>
+    <h1>Which written event <span>are you?</span></h1>
+    <p class="lede">Twenty DECA written events, one of you. Answer 24 quick agree-or-disagree questions and get a type, an event, and the two closest alternatives, in the style of the 16-personalities test.</p>
+    <div class="meta"><span>⏱ About 5 minutes</span><span>✎ 24 questions</span><span>◎ 16 types → 20 events</span></div>
+    <div><button class="btn" id="start">Start the quiz</button></div>
+  </div>
+
+  <div class="families">
+    <div class="fam" style="--fc:var(--fam-vh)"><b>Launchers</b><span>Pitch-deck entrepreneurs and marketers. Innovation Plan, Start-Up Plan, Integrated Marketing Campaigns.</span></div>
+    <div class="fam" style="--fc:var(--fam-vd)"><b>Architects</b><span>Full 20-page business plans. Independent, International, Franchise, Business Growth.</span></div>
+    <div class="fam" style="--fc:var(--fam-ph)"><b>Doers</b><span>Project Management events. Run a real project, then report what happened.</span></div>
+    <div class="fam" style="--fc:var(--fam-pd)"><b>Analysts</b><span>Business Operations Research. Study a local business and write its strategy.</span></div>
+  </div>
+
+  <div class="how">
+    <p class="eyebrow">How it scores you</p>
+    <p>Every question moves you along one of four dichotomies. Your four letters pick one of 16 types, and each type maps to the DECA event whose work you'd most enjoy doing for six months.</p>
+    <div class="dich">
+      <div><b>V · P</b>Venture or Partner. Start something new, or work inside a real organization or community.</div>
+      <div><b>H · D</b>Hands-on or Deep-dive. A tight pitch deck or a real project, versus a thorough 20-page document.</div>
+      <div><b>N · C</b>Numbers or Creative. Financials and data, or story, brand, and people.</div>
+      <div><b>O · M</b>Originator or Mobilizer. Your own idea from scratch, or rallying people around something that exists.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Browse all 16 types</h3>
+    <div class="grid16" id="grid-intro"></div>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz" class="quiz" hidden>
+  <div class="progress">
+    <div class="meta"><span id="qnum">Question 1 of 24</span><span id="qpct">0%</span></div>
+    <div class="bar"><i id="qbar"></i></div>
+  </div>
+  <div class="qcard" id="qcard">
+    <p class="qtext" id="qtext"></p>
+    <div class="scale" id="scale">
+      <span class="lab d">Disagree</span>
+      <button class="dot" data-v="-3" aria-label="Strongly disagree"></button>
+      <button class="dot" data-v="-2" aria-label="Disagree"></button>
+      <button class="dot" data-v="-1" aria-label="Slightly disagree"></button>
+      <button class="dot" data-v="0" aria-label="Neutral"></button>
+      <button class="dot" data-v="1" aria-label="Slightly agree"></button>
+      <button class="dot" data-v="2" aria-label="Agree"></button>
+      <button class="dot" data-v="3" aria-label="Strongly agree"></button>
+      <span class="lab a">Agree</span>
+    </div>
+    <div class="mobile-labs"><span class="d">Disagree</span><span class="a">Agree</span></div>
+  </div>
+  <div class="nav">
+    <button class="btn ghost small" id="back">← Back</button>
+    <span class="hint">Pick a circle to continue. Keys 1–7 work too.</span>
+    <button class="btn small" id="next" hidden>Next →</button>
+  </div>
+</section>
+
+<!-- RESULT -->
+<section id="result" class="result" hidden></section>
+
+<p class="foot">Event formats, team sizes, and the 2026–27 Business Operations Research topic come from DECA's 2026–27 competitive events pages. Always confirm page limits, slide limits, and timing in the current <a href="https://www.deca.org/compete" target="_blank" rel="noopener">DECA Guide</a> and with your chapter advisor, since chartered associations can run events differently. This quiz is a starting point, not a rule.</p>
+
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- data ---------- */
+// axis: 0=V/P 1=H/D 2=N/C 3=O/M ; dir: +1 agrees with the first letter, -1 with the second
+var QUESTIONS=[
+  {a:0,d:1, t:"I'd rather dream up a brand-new business or campaign than improve one that already exists."},
+  {a:1,d:1, t:"I'd rather build the prototype, run the event, or make the ads than write the 20-page analysis behind them."},
+  {a:2,d:1, t:"Building a spreadsheet of financial projections is genuinely satisfying."},
+  {a:3,d:1, t:"The core idea has to be mine, not borrowed from an existing brand or model."},
+  {a:0,d:-1,t:"Working with a real local business or community group sounds more rewarding than inventing something from scratch."},
+  {a:1,d:-1,t:"I enjoy long-form writing where I can build an argument over many pages."},
+  {a:2,d:-1,t:"I'd rather design the visuals, slogans, and story than crunch the budget."},
+  {a:3,d:-1,t:"I'm better at taking something good and making more people care about it than at inventing it."},
+  {a:0,d:1, t:"When I spot a problem, my first instinct is to start something new that solves it."},
+  {a:1,d:1, t:"Give me a tight 20-slide deck and 15 minutes over a thick binder any day."},
+  {a:2,d:1, t:"I trust data more than gut feeling when I make a decision."},
+  {a:3,d:1, t:"Proven models like franchises, established programs, and existing products feel limiting to me."},
+  {a:0,d:-1,t:"I like having a real client or partner whose actual data and needs shape my work."},
+  {a:1,d:-1,t:"I'm happiest when I've researched a topic so thoroughly that nobody can stump me in Q&A."},
+  {a:2,d:-1,t:"The most important part of a presentation is a memorable, emotional story."},
+  {a:3,d:-1,t:"I'd rather rally people around a cause or product than sit alone designing it."},
+  {a:0,d:1, t:"I get excited pitching things that don't exist yet."},
+  {a:1,d:1, t:"I'd rather show judges what we actually did than what we would do."},
+  {a:2,d:1, t:"I'd happily spend an afternoon on a break-even analysis or a pricing model."},
+  {a:3,d:1, t:"Being the first to think of something matters a lot to me."},
+  {a:0,d:-1,t:"I'd rather be the person who improves how an existing organization runs than the one who starts a rival."},
+  {a:1,d:-1,t:"I like producing detailed documents: SWOT analyses, operations plans, financial statements."},
+  {a:2,d:-1,t:"I notice branding, aesthetics, and vibe before I notice the numbers."},
+  {a:3,d:-1,t:"I love organizing people, logistics, and outreach."}
+];
+
+var AXES=[
+  {L:"V",R:"P",ln:"Venture",rn:"Partner"},
+  {L:"H",R:"D",ln:"Hands-on",rn:"Deep-dive"},
+  {L:"N",R:"C",ln:"Numbers",rn:"Creative"},
+  {L:"O",R:"M",ln:"Originator",rn:"Mobilizer"}
+];
+
+var FAM={
+  vh:{name:"Launchers",color:"var(--fam-vh)"},
+  vd:{name:"Architects",color:"var(--fam-vd)"},
+  ph:{name:"Doers",color:"var(--fam-ph)"},
+  pd:{name:"Analysts",color:"var(--fam-pd)"}
+};
+
+var F20="20-page written entry", FPD="20-slide pitch deck";
+var P15="15 minutes", T13="1 to 3 members";
+
+var EVENTS={
+  ESB:{n:"Start-Up Business Plan",cat:"Entrepreneurship",fmt:FPD,team:T13,pres:P15,
+    what:"A pitch deck for a business you want to launch, written to win funding. Judges play the investor or lender: concept, customer, competition, operations, financial projections, and the ask."},
+  EIP:{n:"Innovation Plan",cat:"Entrepreneurship",fmt:FPD,team:T13,pres:P15,
+    what:"A pitch deck for a new product or service idea. You prove the problem is real, show the solution and target market, and explain how it could become a business. No full financial plan required."},
+  IMCP:{n:"Integrated Marketing Campaign – Product",cat:"Integrated Marketing Campaign",fmt:FPD+" + marketing exam",team:T13,pres:P15,
+    what:"A full campaign for a product of your choice: target market, objectives, the promotional mix, budget, timeline, and how you'd measure results. You also take a marketing cluster exam."},
+  IMCE:{n:"Integrated Marketing Campaign – Event",cat:"Integrated Marketing Campaign",fmt:FPD+" + marketing exam",team:T13,pres:P15,
+    what:"A campaign to promote an event: a concert, tournament, festival, or launch. Same campaign structure as the other IMC events, but the thing you're selling is an experience with a date on it."},
+  IMCS:{n:"Integrated Marketing Campaign – Service",cat:"Integrated Marketing Campaign",fmt:FPD+" + marketing exam",team:T13,pres:P15,
+    what:"A campaign to promote a service such as a gym, tutoring, a salon, or a subscription. Intangible products need trust and proof, so the campaign leans on reviews, demos, and relationships."},
+  EIB:{n:"Independent Business Plan",cat:"Entrepreneurship",fmt:F20,team:T13,pres:P15,
+    what:"The complete 20-page plan for a new business of your own: market analysis, operations, marketing, management, and multi-year financials. The most comprehensive entrepreneurship event."},
+  IBP:{n:"International Business Plan",cat:"Entrepreneurship",fmt:F20,team:T13,pres:P15,
+    what:"A 20-page plan for a new business or joint venture in a foreign country. You research that country's culture, law, trade rules, and economy, then design the business to fit."},
+  EFB:{n:"Franchise Business Plan",cat:"Entrepreneurship",fmt:F20,team:T13,pres:P15,
+    what:"A 20-page plan to open a location of an existing franchise. Franchise fees, site selection, local market analysis, and financials for your unit of a proven brand."},
+  EBG:{n:"Business Growth Plan",cat:"Entrepreneurship",fmt:F20,team:T13,pres:P15,
+    what:"A 20-page plan to grow a business you already own and operate. You document where it is, spot the opportunity, and lay out the growth strategy and its financials."},
+  PMBS:{n:"Business Solutions Project",cat:"Project Management",fmt:F20,team:T13,pres:P15,
+    what:"Partner with a local business, diagnose a real operational problem, plan a solution, carry it out, and report the results. Judged on project management: initiating, planning, executing, monitoring, closing."},
+  PMFL:{n:"Financial Literacy Project",cat:"Project Management",fmt:F20,team:T13,pres:P15,
+    what:"Plan and run a project that teaches personal-finance skills to students or a community group: budgeting, credit, saving, investing. Then report what you did and what changed."},
+  PMSP:{n:"Sales Project",cat:"Project Management",fmt:F20,team:T13,pres:P15,
+    what:"Plan and execute a real sales campaign for a product or service, often a chapter fundraiser, and report the revenue, the process, and the lessons."},
+  PMCA:{n:"Community Awareness Project",cat:"Project Management",fmt:F20,team:T13,pres:P15,
+    what:"Pick an issue your community should care about, design a campaign to raise awareness of it, run that campaign, and measure how far it reached."},
+  PMCG:{n:"Community Giving Project",cat:"Project Management",fmt:F20,team:T13,pres:P15,
+    what:"Raise money, goods, or service hours for a cause or organization. You organize the drive, run it, and report the impact."},
+  PMCD:{n:"Career Development Project",cat:"Project Management",fmt:F20,team:T13,pres:P15,
+    what:"Run a project that builds career readiness: career fairs, job shadows, resume workshops, certification drives. Report participation and outcomes."},
+  FOR:{n:"Finance Operations Research",cat:"Business Operations Research",fmt:F20,team:T13,pres:P15,
+    what:"This year every Operations Research event has the same topic: partner with a local business, research what drives customer loyalty and repeat engagement, and write a strategic retention plan. In Finance, that business is a bank, credit union, insurer, or financial-services firm."},
+  BMOR:{n:"Buying and Merchandising Operations Research",cat:"Business Operations Research",fmt:F20,team:T13,pres:P15,
+    what:"This year every Operations Research event has the same topic: partner with a local business, research what drives customer loyalty and repeat engagement, and write a strategic retention plan. In Buying and Merchandising, that business is a retailer: a store, boutique, or e-commerce shop."},
+  SEOR:{n:"Sports and Entertainment Marketing Operations Research",cat:"Business Operations Research",fmt:F20,team:T13,pres:P15,
+    what:"This year every Operations Research event has the same topic: partner with a local business, research what drives customer loyalty and repeat engagement, and write a strategic retention plan. In Sports and Entertainment, that partner is a team, venue, theater, league, or arts organization."},
+  HTOR:{n:"Hospitality and Tourism Operations Research",cat:"Business Operations Research",fmt:F20,team:T13,pres:P15,
+    what:"This year every Operations Research event has the same topic: partner with a local business, research what drives customer loyalty and repeat engagement, and write a strategic retention plan. In Hospitality and Tourism, that partner is a restaurant, hotel, attraction, or travel business."},
+  BOR:{n:"Business Services Operations Research",cat:"Business Operations Research",fmt:F20,team:T13,pres:P15,
+    what:"Same loyalty-and-retention topic, with a business-services partner: a salon, gym, repair shop, agency, or any service firm that doesn't fit the other four clusters."}
+};
+
+var TYPES={
+  VHNO:{fam:"vh",name:"The Founder",ev:"ESB",alts:["EIP","EIB"],
+    why:"You want to start something, you want it to be real enough to fund, and you'd rather pitch it in 20 slides than defend it in 20 pages. Start-Up Business Plan is literally a funding pitch.",
+    watch:"Judges act as investors, so the numbers have to hold up. If you'd rather skip projections entirely, Innovation Plan drops that requirement."},
+  VHCO:{fam:"vh",name:"The Inventor",ev:"EIP",alts:["ESB","IMCP"],
+    why:"New idea, your idea, and you'd rather show a prototype than a balance sheet. Innovation Plan rewards exactly that: the problem, the solution, and the proof it could work.",
+    watch:"\"Cool idea\" isn't enough. The best decks show real customer research and a clear path from idea to business."},
+  VHNM:{fam:"vh",name:"The Growth Marketer",ev:"IMCP",alts:["IMCS","ESB"],
+    why:"You like campaigns with budgets, metrics, and a product to move. IMC-Product gives you an existing product to amplify and asks for a plan with real numbers behind it.",
+    watch:"IMC events include a marketing cluster exam on top of the deck and presentation. Budget study time for it."},
+  VHCM:{fam:"vh",name:"The Showrunner",ev:"IMCE",alts:["IMCS","PMCA"],
+    why:"You think in experiences, stories, and crowds. Promoting an event lets you build hype, visuals, and a timeline that builds to a single big day.",
+    watch:"Creative campaigns still need objectives you can measure. Pick an event where attendance, ticket sales, or sign-ups give you a number to chase."},
+  VDNO:{fam:"vd",name:"The Architect",ev:"EIB",alts:["ESB","IBP"],
+    why:"Your own business, planned all the way down: market, operations, management, three years of financials. Independent Business Plan is the most complete blueprint DECA offers.",
+    watch:"This is the heaviest entrepreneurship document. Start early and split the sections across your team deliberately."},
+  VDCO:{fam:"vd",name:"The Globetrotter",ev:"IBP",alts:["EIB","HTOR"],
+    why:"You like original ideas and the research is half the fun. International Business Plan adds culture, law, and trade to the usual plan, which rewards curious writers.",
+    watch:"Pick a country you can actually research in depth, with reliable data in a language you read. Vagueness about the local market is the usual weak spot."},
+  VDNM:{fam:"vd",name:"The Franchisee",ev:"EFB",alts:["EIB","BMOR"],
+    why:"You respect proven models and you like the math of making one work locally. Franchise Business Plan is a numbers-heavy plan to open a unit of a brand that already exists.",
+    watch:"You'll need real franchise disclosure numbers: fees, royalties, build-out costs. Choose a franchise whose documents you can find."},
+  VDCM:{fam:"vd",name:"The Scaler",ev:"EBG",alts:["EFB","PMSP"],
+    why:"You'd rather grow something real than imagine something new, and you can see the creative angles that take a small business to the next level.",
+    watch:"Business Growth Plan requires an existing business that you own and operate. If you don't have one, Franchise Business Plan or Sales Project are the closest fits."},
+  PHNO:{fam:"ph",name:"The Fixer",ev:"PMBS",alts:["BOR","PMSP"],
+    why:"You want a real client with a real problem, and you want to fix it, not just write about it. Business Solutions Project is consulting with a deadline and a report.",
+    watch:"The hard part is scope. Choose a problem small enough to solve within a semester and measurable enough to prove you solved it."},
+  PHNM:{fam:"ph",name:"The Coach",ev:"PMFL",alts:["PMSP","PMCD"],
+    why:"You're comfortable with money topics and you like bringing people along. Financial Literacy Project is teaching budgeting, credit, and saving to people who need it.",
+    watch:"Judges want evidence of learning, not just attendance. Build in a before-and-after check so you can show what changed."},
+  PHCO:{fam:"ph",name:"The Advocate",ev:"PMCA",alts:["PMCG","IMCE"],
+    why:"You pick the cause and you design the message. Community Awareness Project is a campaign you actually run, so your creativity meets real reach numbers.",
+    watch:"Awareness is hard to measure. Decide up front how you'll count it: survey responses, pledges, impressions, event turnout."},
+  PHCM:{fam:"ph",name:"The Organizer",ev:"PMCG",alts:["PMCD","PMSP"],
+    why:"You love logistics, people, and a visible result. Community Giving Project is organizing a drive or fundraiser for an organization that already does good work.",
+    watch:"Report the full project cycle, not just the total raised. Judges score how you planned, executed, monitored, and closed."},
+  PDNO:{fam:"pd",name:"The Quant",ev:"FOR",alts:["BMOR","PMBS"],
+    why:"You like data more than gut feeling and you want a real partner's numbers to work with. Finance Operations Research lets you model what customer loyalty is worth to a financial-services business.",
+    watch:"Any Operations Research cluster works if the partner fits better. Pick the local business you can actually get data from, then match the cluster to it."},
+  PDNM:{fam:"pd",name:"The Merchant",ev:"BMOR",alts:["FOR","BOR"],
+    why:"You think in sales data, assortments, and repeat customers. Buying and Merchandising Operations Research puts you inside a retailer studying why shoppers come back.",
+    watch:"Retailers have the richest loyalty data of any cluster, so push for real transaction or loyalty-program numbers, not just a survey."},
+  PDCO:{fam:"pd",name:"The Fan Strategist",ev:"SEOR",alts:["HTOR","IMCE"],
+    why:"Fan loyalty is the whole business of sports and entertainment. You get to research what makes people show up again and design the experience that keeps them.",
+    watch:"A school team, a local venue, or a community theater all count. The partner needs to be real and reachable for interviews and data."},
+  PDCM:{fam:"pd",name:"The Host",ev:"HTOR",alts:["BOR","SEOR"],
+    why:"You notice experience and service before you notice spreadsheets. Hospitality and Tourism Operations Research is about why guests return, which is a people question first.",
+    watch:"Business Services Operations Research uses the same topic for any service business. If your best local partner is a salon or a gym, use that cluster instead."}
+};
+
+var ORDER=["VHNO","VHCO","VHNM","VHCM","VDNO","VDCO","VDNM","VDCM","PHNO","PHNM","PHCO","PHCM","PDNO","PDNM","PDCO","PDCM"];
+
+/* ---------- state ---------- */
+var answers=new Array(QUESTIONS.length).fill(null), idx=0;
+var $=function(id){return document.getElementById(id);};
+var intro=$("intro"),quiz=$("quiz"),result=$("result");
+
+function save(){try{localStorage.setItem("deca-quiz",JSON.stringify({answers:answers,idx:idx}));}catch(e){}}
+function load(){try{var s=JSON.parse(localStorage.getItem("deca-quiz")||"null");if(s&&Array.isArray(s.answers)&&s.answers.length===QUESTIONS.length){answers=s.answers;idx=Math.min(s.idx||0,QUESTIONS.length-1);}}catch(e){}}
+
+/* ---------- scoring ---------- */
+function score(ans){
+  var sums=[0,0,0,0];
+  QUESTIONS.forEach(function(q,i){var v=ans[i];if(v==null)return;sums[q.a]+=v*q.d;});
+  var max=3*QUESTIONS.length/4;                     // 18 per axis
+  var code="",pcts=[];
+  AXES.forEach(function(ax,i){
+    var left=sums[i]>=0;                           // ties go to the first letter
+    code+=left?ax.L:ax.R;
+    var p=Math.round(50+50*Math.abs(sums[i])/max); // strength of the winning side
+    pcts.push({win:left?ax.ln:ax.rn,lose:left?ax.rn:ax.ln,left:left,pct:p});
+  });
+  return {code:code,pcts:pcts};
+}
+
+/* ---------- rendering ---------- */
+function show(which){intro.hidden=which!=="intro";quiz.hidden=which!=="quiz";result.hidden=which!=="result";window.scrollTo(0,0);}
+
+function renderQ(){
+  var q=QUESTIONS[idx];
+  $("qtext").textContent=q.t;
+  $("qnum").textContent="Question "+(idx+1)+" of "+QUESTIONS.length;
+  var done=answers.filter(function(a){return a!=null;}).length;
+  $("qpct").textContent=Math.round(100*done/QUESTIONS.length)+"%";
+  $("qbar").style.width=(100*done/QUESTIONS.length)+"%";
+  var card=$("qcard");card.style.animation="none";void card.offsetWidth;card.style.animation="";
+  Array.prototype.forEach.call(document.querySelectorAll(".dot"),function(d){d.classList.toggle("on",answers[idx]!=null&&+d.dataset.v===answers[idx]);});
+  $("back").hidden=false;
+  $("back").textContent=idx===0?"← Intro":"← Back";
+  $("next").hidden=answers[idx]==null;
+  $("next").textContent=idx===QUESTIONS.length-1?"See my type →":"Next →";
+}
+
+function pick(v){
+  answers[idx]=v;save();
+  Array.prototype.forEach.call(document.querySelectorAll(".dot"),function(d){d.classList.toggle("on",+d.dataset.v===v);});
+  setTimeout(advance,260);
+}
+function advance(){
+  if(idx<QUESTIONS.length-1){idx++;save();renderQ();return;}
+  var firstBlank=answers.indexOf(null);
+  if(firstBlank>=0){idx=firstBlank;save();renderQ();return;}
+  renderResult(score(answers));
+}
+
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+
+function typeCard(code,me){
+  var t=TYPES[code],f=FAM[t.fam];
+  return '<button class="tcard'+(me?' me':'')+'" style="--fc:'+f.color+'" data-type="'+code+'">'+
+    '<span class="tc">'+code.split("").join(" · ")+'</span><span class="tn">'+esc(t.name)+'</span><span class="te">'+esc(EVENTS[t.ev].n)+'</span></button>';
+}
+
+function renderResult(sc,fromGrid){
+  var code=sc.code,t=TYPES[code],f=FAM[t.fam],ev=EVENTS[t.ev];
+  var letters=code.split("").map(function(c){return "<span>"+c+"</span>";}).join("");
+  var traits=sc.pcts?sc.pcts.map(function(p){
+    var fillStyle=p.left?'left:0;width:'+p.pct+'%':'right:0;width:'+p.pct+'%';
+    return '<div class="trait"><div class="ends"><span class="'+(p.left?'win':'')+'">'+(p.left?p.win:p.lose)+'</span><span class="'+(p.left?'':'win')+'">'+(p.left?p.lose:p.win)+'</span></div>'+
+      '<div class="track"><div class="fill" style="'+fillStyle+'"></div></div><div class="pct">'+p.pct+'% '+p.win+'</div></div>';
+  }).join(""):"";
+  var alts=t.alts.map(function(a){return '<div class="alt"><span class="ac">'+a+'</span><div><b>'+esc(EVENTS[a].n)+'</b><span>'+esc(EVENTS[a].cat)+' · '+esc(EVENTS[a].fmt)+'</span></div></div>';}).join("");
+  var grid=ORDER.map(function(c){return typeCard(c,c===code);}).join("");
+  var shareText="I'm "+t.name+" ("+code+"). My DECA written event match: "+ev.n+" ("+t.ev+").";
+
+  result.innerHTML=
+    '<div class="badge" style="--fc:'+f.color+'"><div class="top">'+
+      '<p class="eyebrow">'+(fromGrid?'Type profile':'Your DECA event type')+' · '+esc(f.name)+'</p>'+
+      '<h2>'+esc(t.name)+'</h2><div class="code">'+letters+'</div></div>'+
+    '<div class="bottom">'+
+      '<div class="event"><p class="eyebrow">Your event</p><p class="name">'+esc(ev.n)+' <span style="opacity:.7">('+t.ev+')</span></p><p class="cat">'+esc(ev.cat)+'</p></div>'+
+      '<div class="specs"><div class="spec"><span class="k">Format</span><span class="v">'+esc(ev.fmt)+'</span></div>'+
+        '<div class="spec"><span class="k">Team</span><span class="v">'+esc(ev.team)+'</span></div>'+
+        '<div class="spec"><span class="k">Presentation</span><span class="v">'+esc(ev.pres)+'</span></div>'+
+        '<div class="spec"><span class="k">Scoring</span><span class="v">50% written · 50% presentation</span></div></div>'+
+      '<p>'+esc(ev.what)+'</p>'+
+    '</div></div>'+
+    (sc.pcts?'<div class="section" style="--fc:'+f.color+'"><h3>Your four dichotomies</h3><div class="traits">'+traits+'</div></div>':'')+
+    '<div class="section"><h3>Why it fits you</h3><p>'+esc(t.why)+'</p></div>'+
+    '<div class="section"><h3>Watch out for</h3><p>'+esc(t.watch)+'</p></div>'+
+    '<div class="section" style="--fc:'+f.color+'"><h3>Close matches</h3><div class="alts">'+alts+'</div></div>'+
+    '<div class="callout"><b>Would rather not write anything?</b><span>Professional Selling (PSE), Financial Consulting (FCE), and Hospitality and Tourism Professional Selling (HTPS) have no written entry: one person, a prepared sales or consulting presentation on a set topic, plus an exam. This year’s topics: pitching an AI customer-service and retail-analytics platform to a regional retail chain, advising a business owner in their late 50s on selling or handing off the business, and selling experience-based group travel packages to a travel agency.</span></div>'+
+    '<div class="actions"><button class="btn" id="copy">Copy my result</button><button class="btn ghost" id="retake">'+(fromGrid?'Take the quiz':'Retake the quiz')+'</button><span class="toast" id="toast"></span></div>'+
+    '<div class="section"><h3>All 16 types</h3><div class="grid16" id="grid-result">'+grid+'</div></div>';
+
+  show("result");
+  $("copy").addEventListener("click",function(){
+    var done=function(){$("toast").textContent="Copied";};
+    var fail=function(){$("toast").textContent=shareText;};
+    try{navigator.clipboard.writeText(shareText).then(done,fail);}catch(e){fail();}
+  });
+  $("retake").addEventListener("click",function(){answers=new Array(QUESTIONS.length).fill(null);idx=0;save();renderQ();show("quiz");});
+  bindGrid($("grid-result"));
+}
+
+function bindGrid(el){
+  el.addEventListener("click",function(e){
+    var b=e.target.closest("[data-type]");if(!b)return;
+    renderResult({code:b.dataset.type,pcts:null},true);
+  });
+}
+
+/* ---------- wire up ---------- */
+$("grid-intro").innerHTML=ORDER.map(function(c){return typeCard(c,false);}).join("");
+bindGrid($("grid-intro"));
+$("start").addEventListener("click",function(){renderQ();show("quiz");});
+$("scale").addEventListener("click",function(e){var d=e.target.closest(".dot");if(d)pick(+d.dataset.v);});
+$("back").addEventListener("click",function(){if(idx===0){show("intro");return;}idx--;save();renderQ();});
+$("next").addEventListener("click",advance);
+document.addEventListener("keydown",function(e){
+  if(quiz.hidden)return;
+  var k=e.key;
+  if(k>="1"&&k<="7"){pick(+k-4);}
+  else if(k==="ArrowRight"||k==="Enter"){if(answers[idx]!=null)advance();}
+  else if(k==="ArrowLeft"){if(idx>0){idx--;renderQ();}}
+});
+
+load();
+// If a previous visit finished the quiz, offer the result right away; otherwise stay on the intro.
+if(answers.every(function(a){return a!=null;})){renderResult(score(answers));}
+})();
+</script>
+</body>
+</html>
